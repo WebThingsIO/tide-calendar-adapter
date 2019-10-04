@@ -1,7 +1,7 @@
 {
   "name": "tide-calendar-adapter",
   "display_name": "Tide Calendar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Tide calendar for Mozilla WebThings Gateway",
   "author": "Mozilla IoT",
   "main": "main.py",
@@ -23,9 +23,11 @@
   },
   "files": [
     "LICENSE",
+    "README.md",
     "SHA256SUMS",
     "lib",
     "main.py",
+    "manifest.json",
     "pkg/__init__.py",
     "pkg/tide_calendar_adapter.py",
     "pkg/tide_calendar_device.py",

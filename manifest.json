@@ -1,0 +1,49 @@
+{
+  "author": "Mozilla IoT",
+  "description": "Tide calendar for Mozilla WebThings Gateway",
+  "gateway_specific_settings": {
+    "webthings": {
+      "exec": "python3 {path}/main.py",
+      "primary_type": "adapter",
+      "strict_max_version": "*",
+      "strict_min_version": "0.10.0"
+    }
+  },
+  "homepage_url": "https://github.com/mozilla-iot/tide-calendar-adapter",
+  "id": "tide-calendar-adapter",
+  "license": "MPL-2.0",
+  "manifest_version": 1,
+  "name": "Tide Calendar",
+  "options": {
+    "default": {
+      "stations": [],
+      "unit": "ft"
+    },
+    "schema": {
+      "type": "object",
+      "required": [
+        "stations",
+        "unit"
+      ],
+      "properties": {
+        "stations": {
+          "type": "array",
+          "description": "List of NOAA station IDs",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "unit": {
+          "type": "string",
+          "description": "Water level unit system",
+          "enum": [
+            "english",
+            "metric"
+          ]
+        }
+      }
+    }
+  },
+  "short_name": "Tide",
+  "version": "0.2.0"
+}
