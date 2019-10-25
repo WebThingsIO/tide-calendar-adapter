@@ -124,6 +124,14 @@ class TideCalendarDevice(Device):
                 0
             )
 
+        self.links = [
+            {
+                'rel': 'alternate',
+                'mediaType': 'text/html',
+                'href': 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id={}'.format(self.station_id),  # noqa
+            },
+        ]
+
         t = threading.Thread(target=self.poll)
         t.daemon = True
         t.start()
