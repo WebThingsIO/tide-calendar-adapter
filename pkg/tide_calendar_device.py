@@ -47,7 +47,7 @@ class TideCalendarDevice(Device):
                 self,
                 'lowTideTime',
                 {
-                    'label': 'Low Tide Time',
+                    'title': 'Low Tide Time',
                     'type': 'string',
                     'readOnly': True,
                 },
@@ -58,7 +58,7 @@ class TideCalendarDevice(Device):
                 self,
                 'lowTideLevel',
                 {
-                    'label': 'Low Tide Level',
+                    'title': 'Low Tide Level',
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
                     'readOnly': True,
@@ -70,7 +70,7 @@ class TideCalendarDevice(Device):
                 self,
                 'lowTide',
                 {
-                    'label': 'Low Tide',
+                    'title': 'Low Tide',
                     'type': 'boolean',
                     'readOnly': True,
                 },
@@ -81,7 +81,7 @@ class TideCalendarDevice(Device):
                 self,
                 'highTideTime',
                 {
-                    'label': 'High Tide Time',
+                    'title': 'High Tide Time',
                     'type': 'string',
                     'readOnly': True,
                 },
@@ -92,7 +92,7 @@ class TideCalendarDevice(Device):
                 self,
                 'highTideLevel',
                 {
-                    'label': 'High Tide Level',
+                    'title': 'High Tide Level',
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
                     'readOnly': True,
@@ -104,7 +104,7 @@ class TideCalendarDevice(Device):
                 self,
                 'highTide',
                 {
-                    'label': 'High Tide',
+                    'title': 'High Tide',
                     'type': 'boolean',
                     'readOnly': True,
                 },
@@ -116,7 +116,7 @@ class TideCalendarDevice(Device):
                 self,
                 'currentLevel',
                 {
-                    'label': 'Current Level',
+                    'title': 'Current Level',
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
                     'readOnly': True,
