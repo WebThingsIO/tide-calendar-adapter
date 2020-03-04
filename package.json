@@ -1,7 +1,7 @@
 {
   "name": "tide-calendar-adapter",
   "display_name": "Tide Calendar",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Tide calendar for Mozilla WebThings Gateway",
   "author": "Mozilla IoT",
   "main": "main.py",
@@ -43,7 +43,7 @@
     "exec": "python3 {path}/main.py",
     "config": {
       "stations": [],
-      "unit": "ft"
+      "unit": "english"
     },
     "schema": {
       "type": "object",
