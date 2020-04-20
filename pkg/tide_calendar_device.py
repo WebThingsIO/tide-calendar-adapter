@@ -124,6 +124,8 @@ class TideCalendarDevice(Device):
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
                     'multipleOf': 0.1,
+                    'minimum': -50 if self.unit == 'english' else -15.2,
+                    'maximum': 50 if self.unit == 'english' else 15.2,
                     'readOnly': True,
                 },
                 0
