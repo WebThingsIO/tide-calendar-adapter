@@ -112,11 +112,13 @@ class TideCalendarDevice(Device):
             )
 
         if self.have_water_levels:
+            self._type = ['MultiLevelSensor']
             self.properties['currentLevel'] = TideCalendarProperty(
                 self,
                 'currentLevel',
                 {
                     'title': 'Current Level',
+                    '@type': 'LevelProperty',
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
                     'readOnly': True,
