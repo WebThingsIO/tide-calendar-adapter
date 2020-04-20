@@ -61,6 +61,7 @@ class TideCalendarDevice(Device):
                     'title': 'Low Tide Level',
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
+                    'multipleOf': 0.1,
                     'readOnly': True,
                 },
                 0
@@ -95,6 +96,7 @@ class TideCalendarDevice(Device):
                     'title': 'High Tide Level',
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
+                    'multipleOf': 0.1,
                     'readOnly': True,
                 },
                 0
@@ -121,6 +123,7 @@ class TideCalendarDevice(Device):
                     '@type': 'LevelProperty',
                     'type': 'number',
                     'unit': 'foot' if self.unit == 'english' else 'meter',
+                    'multipleOf': 0.1,
                     'readOnly': True,
                 },
                 0
@@ -234,7 +237,7 @@ class TideCalendarDevice(Device):
                                     set_high = True
 
                                     self.properties['highTideLevel'].update(
-                                        float(prediction['v'])
+                                        round(float(prediction['v']), 1)
                                     )
                                     self.properties['highTideTime'].update(
                                         prediction['t'].split(' ')[1]
@@ -244,7 +247,7 @@ class TideCalendarDevice(Device):
                                     set_low = True
 
                                     self.properties['lowTideLevel'].update(
-                                        float(prediction['v'])
+                                        round(float(prediction['v']), 1)
                                     )
                                     self.properties['lowTideTime'].update(
                                         prediction['t'].split(' ')[1]
@@ -279,7 +282,7 @@ class TideCalendarDevice(Device):
                               .format(self.station_id))
                     else:
                         self.properties['currentLevel'].update(
-                            float(level['v'])
+                            round(float(level['v']), 1)
                         )
 
             time.sleep(_POLL_INTERVAL)
