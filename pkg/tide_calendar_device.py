@@ -39,8 +39,8 @@ class TideCalendarDevice(Device):
 
         self.get_station_info()
 
-        self.next_high_tide = None
-        self.next_low_tide = None
+        self.high_tides = []
+        self.low_tides = []
 
         if self.have_tide_predictions:
             self.properties['lowTideTime'] = TideCalendarProperty(
@@ -111,6 +111,23 @@ class TideCalendarDevice(Device):
                     'readOnly': True,
                 },
                 False
+            )
+
+            self.properties['status'] = TideCalendarProperty(
+                self,
+                'status',
+                {
+                    'title': 'Status',
+                    'type': 'string',
+                    'enum': [
+                        'low',
+                        'high',
+                        'rising',
+                        'falling',
+                    ],
+                    'readOnly': True,
+                },
+                ''
             )
 
         if self.have_water_levels:
@@ -204,7 +221,7 @@ class TideCalendarDevice(Device):
                             'product': 'predictions',
                             'application': 'NOS.COOPS.TAC.WL',
                             'begin_date': '{}{:02d}{:02d}'.format(now.year, now.month, now.day),  # noqa
-                            'range': '24',
+                            'range': '36',
                             'datum': 'MLLW',
                             'station': '{}'.format(self.station_id),
                             'time_zone': 'lst_ldt',
@@ -224,6 +241,9 @@ class TideCalendarDevice(Device):
                         print('Invalid tide prediction data for station {}'
                               .format(self.station_id))
                     else:
+                        self.high_tides = []
+                        self.low_tides = []
+
                         set_high = False
                         set_low = False
 
@@ -233,27 +253,42 @@ class TideCalendarDevice(Device):
                                 '%Y-%m-%d %H:%M'
                             )
 
-                            if parsed >= now:
-                                if prediction['type'] == 'H' and not set_high:
-                                    self.next_high_tide = parsed
-                                    set_high = True
+                            if parsed < now:
+                                continue
 
+                            level = round(float(prediction['v']), 1)
+                            timestamp = prediction['t'].split(' ')[1]
+
+                            if prediction['type'] == 'H':
+                                self.high_tides.append({
+                                    'datetime': parsed,
+                                    'level': level,
+                                    'timestamp': timestamp,
+                                })
+
+                                if not set_high:
                                     self.properties['highTideLevel'].update(
-                                        round(float(prediction['v']), 1)
+                                        level
                                     )
                                     self.properties['highTideTime'].update(
-                                        prediction['t'].split(' ')[1]
+                                        timestamp
                                     )
-                                elif prediction['type'] == 'L' and not set_low:
-                                    self.next_low_tide = parsed
-                                    set_low = True
+                                    set_high = True
+                            elif prediction['type'] == 'L':
+                                self.low_tides.append({
+                                    'datetime': parsed,
+                                    'level': level,
+                                    'timestamp': timestamp,
+                                })
 
+                                if not set_low:
                                     self.properties['lowTideLevel'].update(
-                                        round(float(prediction['v']), 1)
+                                        level
                                     )
                                     self.properties['lowTideTime'].update(
-                                        prediction['t'].split(' ')[1]
+                                        timestamp
                                     )
+                                    set_low = True
 
             if self.have_water_levels:
                 url = 'https://tidesandcurrents.noaa.gov/api/datagetter'
@@ -300,14 +335,59 @@ class TideCalendarDevice(Device):
                 microsecond=0
             )
 
-            if self.next_high_tide is not None:
-                if now == self.next_high_tide:
+            status_set = False
+
+            if len(self.high_tides) > 0:
+                next_high_tide = self.high_tides[0]['datetime']
+
+                if now == next_high_tide:
                     self.properties['highTide'].update(True)
+                    self.properties['status'].update('high')
+                    status_set = True
                 else:
+                    if next_high_tide < now:
+                        self.high_tides.pop(0)
+
+                        if len(self.high_tides) > 0:
+                            next_high_tide = self.high_tides[0]
+                            self.properties['highTideLevel'].update(
+                                next_high_tide['level']
+                            )
+                            self.properties['highTideTime'].update(
+                                next_high_tide['timestamp']
+                            )
+
                     self.properties['highTide'].update(False)
 
-            if self.next_low_tide is not None:
-                if now == self.next_low_tide:
+            if len(self.low_tides) > 0:
+                next_low_tide = self.low_tides[0]['datetime']
+
+                if now == next_low_tide:
                     self.properties['lowTide'].update(True)
+                    self.properties['status'].update('low')
+                    status_set = True
                 else:
+                    if next_low_tide < now:
+                        self.low_tides.pop(0)
+
+                        if len(self.low_tides) > 0:
+                            next_low_tide = self.low_tides[0]
+                            self.properties['lowTideLevel'].update(
+                                next_low_tide['level']
+                            )
+                            self.properties['lowTideTime'].update(
+                                next_low_tide['timestamp']
+                            )
+
                     self.properties['lowTide'].update(False)
+
+            if len(self.high_tides) > 0 and \
+                    len(self.low_tides) > 0 and \
+                    not status_set:
+                next_low_tide = self.low_tides[0]
+                next_high_tide = self.high_tides[0]
+
+                if next_low_tide['datetime'] < next_high_tide['datetime']:
+                    self.properties['status'].update('falling')
+                else:
+                    self.properties['status'].update('rising')
