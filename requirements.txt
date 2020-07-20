@@ -1,2 +1,2 @@
-pytz==2019.3
-requests==2.23.0
+pytz==2020.1
+requests==2.24.0
