@@ -1,4 +1,4 @@
-"""Tide calendar adapter for Mozilla WebThings Gateway."""
+"""Tide calendar adapter for WebThings Gateway."""
 
 from gateway_addon import Device
 import datetime

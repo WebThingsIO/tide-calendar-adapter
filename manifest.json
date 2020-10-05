@@ -1,6 +1,6 @@
 {
-  "author": "Mozilla IoT",
-  "description": "Tide calendar for Mozilla WebThings Gateway",
+  "author": "WebThingsIO",
+  "description": "Tide calendar for WebThings Gateway",
   "gateway_specific_settings": {
     "webthings": {
       "exec": "python3 {path}/main.py",
@@ -9,7 +9,7 @@
       "strict_min_version": "0.10.0"
     }
   },
-  "homepage_url": "https://github.com/mozilla-iot/tide-calendar-adapter",
+  "homepage_url": "https://github.com/WebThingsIO/tide-calendar-adapter",
   "id": "tide-calendar-adapter",
   "license": "MPL-2.0",
   "manifest_version": 1,
@@ -45,5 +45,5 @@
     }
   },
   "short_name": "Tide",
-  "version": "0.4.2"
+  "version": "0.4.3"
 }
